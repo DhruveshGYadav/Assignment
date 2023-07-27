@@ -1,0 +1,137 @@
+﻿<div>
+    <table width="100%" id="dtExample" class="display " cellspacing="0">
+        <thead>
+            <tr>
+
+                <th>S.No</th>
+                <th style="display:none;">Id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>DOB</th>
+                <th>Address</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        fnLoadDataTableInstance()
+    })
+    function fnLoadDataTableInstance() {
+        //var dataSource;
+        //$.ajax({
+        //    url: "https://localhost:7104/api/UserAPI",
+        //    success: function (result) {
+        //        debugger
+        //        dataSource = result;
+        //    }
+        //});
+
+        $('#dtExample').DataTable({
+            dom: 'Bfrtip',
+            //data: dataSource,
+            ajax: {
+                url: 'https://localhost:7104/api/UserAPI',
+                dataSrc: ''
+            },
+            columns: [
+                {
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                { data: 'firstName', class: 'editable text' },
+                { data: 'lastName' },
+                { data: 'email' },
+                { data: 'dob' },
+                { data: 'address' },
+                {
+                    //edit button creation
+                    render: function (data, type, row) {
+                        return createButton('edit', row.id);
+                    }
+                },
+                {
+                    //delete button creation
+                    render: function (data, type, row) {
+                        return createButton('delete', row.id);
+                    }
+                }
+            ],
+            "searching": false,
+            "paging": true,
+            "info": true,
+            "language": {
+                "emptyTable": "No data available"
+            },
+            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                $("td:first", nRow).html(iDisplayIndex + 1);
+                return nRow;
+            },
+        })
+        $('#dtExample').on('click', 'tbody td .edit', function (e) {
+            fnResetControls();
+            var dataTable = $('#dtExample').DataTable();
+            var clickedRow = $($(this).closest('td')).closest('tr');
+            $(clickedRow).find('td').each(function () {
+                // do your cool stuff
+                if ($(this).hasClass('editable')) {
+                    if ($(this).hasClass('text')) {
+                        var html = fnCreateTextBox($(this).html(), 'name');
+                        $(this).html($(html))
+                    }
+                }
+            });
+
+
+            $('#dtExample tbody tr td .update').removeClass('update').addClass('edit').html('Edit');
+            $('#dtExample tbody tr td .cancel').removeClass('cancel').addClass('delete').html('Delete');
+            $(clickedRow).find('td .edit').removeClass('edit').addClass('update').html('Update');
+            $(clickedRow).find('td .delete').removeClass('delete').addClass('cancel').html('Cancel');
+
+        });
+        $('#dtExample').on('click', 'tbody td .cancel', function (e) {
+            fnResetControls();
+            $('#dtExample tbody tr td .update').removeClass('update').addClass('edit').html('Edit');
+            $('#dtExample tbody tr td .cancel').removeClass('cancel').addClass('delete').html('Delete');
+        });
+        $('#dtExample').on('click', 'tbody td .update', function (e) {
+
+            var openedTextBox = $('#dtExample').find('input');
+            $.each(openedTextBox, function (k, $cell) {
+                fnUpdateDataTableValue($cell, $cell.value);
+                $(openedTextBox[k]).closest('td').html($cell.value);
+            })
+
+            $('#dtExample tbody tr td .update').removeClass('update').addClass('edit').html('Edit');
+            $('#dtExample tbody tr td .cancel').removeClass('cancel').addClass('delete').html('Delete');
+        });
+    }
+    function fnUpdateDataTableValue($inputCell, value) {
+        var dataTable = $('#dtExample').DataTable();
+        var rowIndex = dataTable.row($($inputCell).closest('tr')).index();
+        var fieldName = $($inputCell).attr('data-field');
+        dataTable.rows().data()[rowIndex][fieldName] = value;
+    }
+
+    function fnResetControls() {
+        var openedTextBox = $('#dtExample').find('input');
+        $.each(openedTextBox, function (k, $cell) {
+            $(openedTextBox[k]).closest('td').html($cell.value);
+        })
+    }
+
+    function fnCreateTextBox(value, fieldprop) {
+        return '<input data-field="' + fieldprop + '" type="text" value="' + value + '" ></input>';
+    }
+    function createButton(buttonType, rowID) {
+        var buttonText = buttonType == "edit" ? "Edit" : "Delete";
+        return '<button class="' + buttonType + '" type="button">' + buttonText + '</button>';
+    }
+
+</script>
