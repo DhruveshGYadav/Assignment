@@ -6,8 +6,8 @@ namespace Common
     public class EFContext:DbContext
     {
         public EFContext(DbContextOptions dbContext):base(dbContext) { }
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> User { get; set; }
 
-        public DbSet<UserExperience> UserExperiences { get; set; }
+        public DbSet<UserExperience> UserExperience { get; set; }
     }
 }

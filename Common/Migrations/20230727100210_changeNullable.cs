@@ -11,7 +11,7 @@ namespace Common.Migrations
         {
             migrationBuilder.AlterColumn<DateTime>(
                 name: "DOB",
-                table: "Users",
+                table: "User",
                 type: "datetime2",
                 nullable: false,
                 oldClrType: typeof(string),
@@ -22,7 +22,7 @@ namespace Common.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "DOB",
-                table: "Users",
+                table: "User",
                 type: "nvarchar(max)",
                 nullable: false,
                 oldClrType: typeof(DateTime),

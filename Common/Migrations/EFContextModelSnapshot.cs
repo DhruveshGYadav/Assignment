@@ -83,7 +83,7 @@ namespace Common.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserExperiences");
+                    b.ToTable("UserExperience");
                 });
 
             modelBuilder.Entity("Common.Models.UserExperience", b =>

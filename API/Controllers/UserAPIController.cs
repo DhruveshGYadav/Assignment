@@ -1,5 +1,6 @@
 ﻿using Common.Models;
 using Common.Services.Interfaces;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,11 +29,11 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(User user)
+        public IActionResult Post(User usermodel)
         {
             try
             {
-                return Ok(_userSerice.AddUser(user));
+                return Ok(_userSerice.AddUser(usermodel));
             }
             catch (Exception ex)
             {
@@ -64,12 +65,24 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut]
-        public IActionResult UpdateUser(User user)
+        [HttpPut("UpdateUser")]
+        public IActionResult UpdateUser(User data)
         {
             try
             {
-                return Ok(_userSerice.UpdateUser(user));
+                return Ok(_userSerice.UpdateUser(data));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("UpdateUserExperience")]
+        public IActionResult UpdateUserExperience(UserExperience data)
+        {
+            try
+            {
+                return Ok(_userSerice.UpdateUserExperience(data));
             }
             catch (Exception ex)
             {
@@ -77,12 +90,24 @@ namespace API.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("DeleteUser")]
         public IActionResult DeleteUser(int userId)
         {
             try
             {
                 return Ok(_userSerice.DeleteUser(userId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete("DeleteUserExperience")]
+        public IActionResult DeleteUserExperience(int Id)
+        {
+            try
+            {
+                return Ok(_userSerice.DeleteUserExperience(Id));
             }
             catch (Exception ex)
             {

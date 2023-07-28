@@ -40,10 +40,18 @@ namespace Common.Services
         {
             return _userRepository.UpdateUser(user);
         }
+        public bool UpdateUserExperience(UserExperience userex)
+        {
+            return _userRepository.UpdateUserExperience(userex);
+        }
 
         public bool DeleteUser(int id)
         {
             return _userRepository.DeleteUser(id);
+        }
+        public bool DeleteUserExperience(int id)
+        {
+            return _userRepository.DeleteUserExperience(id);
         }
     }
 }
